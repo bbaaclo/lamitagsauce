@@ -1,6 +1,6 @@
 // Change this version (v2 -> v3 ...) every time you upload changed app files,
 // so installed phones pick up the update the next time they open with internet.
-const CACHE = 'lami-tag-sauce-v3';
+const CACHE = 'lami-tag-sauce-v4';
 const SHELL = 'index.html';
 const ASSETS = [
   SHELL, 'manifest.webmanifest',

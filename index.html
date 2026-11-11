@@ -390,6 +390,8 @@ let dayPay = { pay: 'cash', cash: '' };
 let busDraft = null;
 let weigh = '';
 let report = { date: dayStr(new Date()), range: 'day' };
+let dayKey = dayStr(new Date());
+function rollDay() { const t = dayStr(new Date()); if (t !== dayKey) { dayKey = t; report.date = t; report.range = 'day'; } }
 let busQuery = '';
 let sheetState = null;
 
@@ -521,6 +523,7 @@ function renderNav() {
   nav.innerHTML = TABS.map(t => '<button type="button" data-act="go" data-v="' + t[0] + '"' + (t[0] === view ? ' aria-current="page"' : '') + '>' + t[2] + t[1] + '</button>').join('');
 }
 function render(keepScroll) {
+  rollDay();
   const v = $('#view'), st = v.scrollTop;
   const out = VIEWS[view]();
   v.innerHTML = '<div class="wrap">' + out.body + '</div>';
@@ -1174,7 +1177,9 @@ $('#restoreFile').addEventListener('change', e => { const f = e.target.files[0];
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) hiddenAt = Date.now();
   else if (!locked && settings.pin && hiddenAt && Date.now() - hiddenAt > HIDE_MS) showLock('enter');
+  else if (!locked && dayStr(new Date()) !== dayKey) render(true);
 });
+setInterval(() => { if (!locked && dayStr(new Date()) !== dayKey && $('#sheetBg').hidden && $('#viewer').hidden) render(true); }, 60000);
 
 /* ================= init ================= */
 (async function init() {
